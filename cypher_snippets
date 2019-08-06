@@ -3,4 +3,13 @@ CALL algo.pageRank.stream(
 	'MATCH (p1:Person)-->()<--(p2:Person) 
 	RETURN distinct id(p1) AS source, id(p2) AS target',{graph:'cypher'}) 
 YIELD nodeId, score
-RETURN algo.asNode(nodeId).name AS name, score ORDER BY score DESC
+RETURN algo.asNode(nodeId).name AS name, score ORDER BY score DESC;
+
+
+//Option with ACTED_IN relationship
+CALL algo.pageRank.stream(
+	'MATCH (p:Person) RETURN id(p) AS id',
+	'MATCH (p1:Person)-[:ACTED_IN]->()<-[:ACTED_IN]-(p2:Person) 
+	RETURN distinct id(p1) AS source, id(p2) AS target',{graph:'cypher'}) 
+YIELD nodeId, score
+RETURN algo.asNode(nodeId).name AS name, score ORDER BY score DESC;
